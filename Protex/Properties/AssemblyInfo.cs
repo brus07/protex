@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Protex")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Classes used to control")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Protex")]
-[assembly: AssemblyCopyright("Copyright © 2011")]
+[assembly: AssemblyCopyright("BSD")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("aa587eb2-0875-40ba-98b6-692d3adbfa9f")]
+//[assembly: Guid("aa587eb2-0875-40ba-98b6-692d3adbfa9f")]
 
 // Version information for an assembly consists of the following four values:
 //
