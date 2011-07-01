@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Options>
+	<Option name="ssh_hostaddress" value="192.168.56.101" />	
+	<Option name="ssh_username" value="acm" />	
+	<Option name="ssh_password" value="acm_password" />	
+	<Option name="user_scripts_folder" value="~/user_scripts/" />	
+	<Option name="tmp_folder" value="~/tmp/" />	
+	<Option name="solutions_folder" value="~/solutions/" />	
+	<Option name="organizer_script" value="organizer.sh" />	
+	<Option name="compiler_script" value="compiler.sh" />	
+	<Option name="runner_script" value="runner.sh" />
+</Options>
