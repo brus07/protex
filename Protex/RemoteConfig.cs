@@ -8,6 +8,9 @@ namespace ProtexCore
 {
 	public enum RemoteOption 
 	{ 
+        SSH_Port, 
+        /* Possible replacement for UserName and password */
+        SSH_IdentityFile, SSH_IdentityPassphrase,
 		/* Connection options */
 		SSH_HostAddress, SSH_UserName, SSH_Password,
 		/* Special folders pathes:
@@ -26,8 +29,9 @@ namespace ProtexCore
 		 *    RunnerScript - runs user solution in right way with 
 		 *                   special security restrictions or without
 		 *                   them. Also measures time.
+         *   CleanUpScript - removes temporary data (e.g. user solution)
 		*/
-		OrganizerScript, CompilerScript, RunnerScript
+		OrganizerScript, CompilerScript, RunnerScript, CleanUpScript
 	}
 	
 	public class WrongXMLSyntaxException : ApplicationException
@@ -70,29 +74,37 @@ namespace ProtexCore
 		{
 			get { return this.options[option]; }
 		}
+
+        public bool HasOption(T option)
+        {
+            return this.options.ContainsKey(option);
+        }
 		
 		public abstract void ParseConfig (string pathToConfig, string rootElementName);
 	}
 	
 	public class RemoteConfig : OperationsConfig<RemoteOption>
 	{
-		public RemoteConfig () 
-			: base()
-		{
+        public RemoteConfig()
+            : base()
+        {
             // enshure user cannot
-			this.known_options = new Dictionary<string, RemoteOption> ()
+            this.known_options = new Dictionary<string, RemoteOption>()
 			{
+                {"ssh_port", RemoteOption.SSH_Port},
 				{"ssh_hostaddress", RemoteOption.SSH_HostAddress},
 				{"ssh_username", RemoteOption.SSH_UserName},
 				{"ssh_password", RemoteOption.SSH_Password},
+                {"ssh_identity_file", RemoteOption.SSH_IdentityFile},
 				{"user_scripts_folder", RemoteOption.UserScriptsFolder},
 				{"tmp_folder", RemoteOption.TmpFolder},
 				{"solutions_folder", RemoteOption.SolutionsFolder},
 				{"organizer_script", RemoteOption.OrganizerScript},
 				{"compiler_script", RemoteOption.CompilerScript},
-				{"runner_script", RemoteOption.RunnerScript}
+				{"runner_script", RemoteOption.RunnerScript},
+                {"cleanup_script", RemoteOption.CleanUpScript}
 			};
-		}
+        }
 		
 		public override void ParseConfig (string pathToXML, string rootElementName)
 		{

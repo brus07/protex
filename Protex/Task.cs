@@ -168,6 +168,27 @@ namespace ProtexCore
 
     public enum SourceLanguage { CSharp, C, Cpp, Java, Pascal, Ruby, Python, Perl, PHP, Lisp }
 
+    public static class RunnerHelper
+    {
+        public static Dictionary<SourceLanguage, string> Language;
+
+        static RunnerHelper()
+        {
+            Language = new Dictionary<SourceLanguage, string>()
+            {
+                {SourceLanguage.C, "c"},
+                {SourceLanguage.Cpp, "cpp"},
+                {SourceLanguage.Java, "java"},
+                {SourceLanguage.Pascal, "pas"},
+                {SourceLanguage.Ruby, "ruby"},
+                {SourceLanguage.Python, "py"},
+                {SourceLanguage.Perl, "perl"},
+                {SourceLanguage.PHP, "php"},
+                {SourceLanguage.Lisp, "lisp"}
+            };
+        }
+    }
+
     public class CompileSourceTask : ProtexTask
     {
         // language of sources
