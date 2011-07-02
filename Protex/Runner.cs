@@ -122,6 +122,8 @@ namespace ProtexCore
                 else
                     connection.AddIdentityFile(this.innerConfig[RemoteOption.SSH_IdentityFile]);
             }
+            else
+                connection.Password = this.innerConfig[RemoteOption.SSH_Password];
             
             return connection;
         }
