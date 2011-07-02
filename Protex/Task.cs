@@ -4,79 +4,82 @@ using System.Text;
 
 namespace ProtexCore
 {
-	public class TaskCompletedEventArgs : EventArgs
-	{
+    public class TaskCompletedEventArgs : EventArgs
+    {
         protected RunnerCommandResult commandResult;
-		
-		public TaskCompletedEventArgs ()
-			:base()
-		{
-		}
+
+        public TaskCompletedEventArgs()
+            : base()
+        {
+        }
 
         public TaskCompletedEventArgs(RunnerCommandResult res)
-		{
+        {
             this.commandResult = res;
-		}
+        }
 
         public RunnerCommandResult CommandResult
         {
             get { return this.commandResult; }
         }
-	}
-	
-	public delegate void TaskCompletedEventHandler(object sender, TaskCompletedEventArgs args);
-	
-	public class ProtexTask
-	{
+    }
+
+    public delegate void TaskCompletedEventHandler(object sender, TaskCompletedEventArgs args);
+
+    public class ProtexTask
+    {
         /// <summary>
         /// Additional options that can be passed to a script 
         /// both on remote server or local
         /// </summary>
         protected Dictionary<string, string> scriptOptions;
 
-		public ProtexTask ()
-		{
-			this.IsActive = false;
-			this.IsFinished = false;
+        public ProtexTask()
+        {
+            this.IsActive = false;
+            this.IsFinished = false;
 
             this.scriptOptions = new Dictionary<string, string>();
-		}
-		
-		/// <summary>
-		/// Occurs when task completed.
-		/// </summary>
-		public event TaskCompletedEventHandler TaskCompleted;
-		
+        }
+
+        /// <summary>
+        /// Occurs when task completed.
+        /// </summary>
+        public event TaskCompletedEventHandler TaskCompleted;
+
         /// <summary>
         /// Raises TaskCompleted event when task is completed
         /// </summary>
         /// <param name="output"></param>
         internal virtual void OnTaskCompleted(RunnerCommandResult result)
-		{
+        {
             this.IsActive = false;
             this.IsFinished = true;
 
-			if (TaskCompleted != null)
-				TaskCompleted (this, 
-					new TaskCompletedEventArgs (result));
-		}
-		
-		/// <summary>
-		/// Main method for task execution
-		/// </summary>
-        public virtual RunnerCommandResult Perform(IRunner runner)
-		{
+            if (TaskCompleted != null)
+                TaskCompleted(this,
+                    new TaskCompletedEventArgs(result));
+        }
+
+        /// <summary>
+        /// Main method for task execution
+        /// </summary>
+        internal virtual RunnerCommandResult Perform(IRunner runner)
+        {
             return new RunnerCommandResult() { Output = string.Empty, ReturnState = 0 };
-		}
+        }
 
         /// <summary>
         /// Will join inner dictionary in two ways:
-        /// 1. If both key and value are present, than option will be "key=value"
-        /// 2. If only key is present, than option will be just "key"
+        /// 1. If both key and value are present, than option will be "--key=value"
+        /// 2. If only key is present, than option will be just "--key" of "-k" if key's length is 1
         /// </summary>
         /// <returns>String with joined params</returns>
         protected virtual string DictionaryToParams()
         {
+            if (this.scriptOptions == null)
+                return string.Empty;
+
             char whitespace = ' ';
             StringBuilder sb = new StringBuilder();
             bool first = true;
@@ -88,46 +91,55 @@ namespace ProtexCore
                 else
                     sb.Append(whitespace);
 
+                if (pair.Key.Length > 1)
+                    sb.Append("--");
+                else
+                    sb.Append('-');
+
                 sb.Append(pair.Key);
 
                 // append value if only it's not empty
                 if (!string.IsNullOrEmpty(pair.Value))
                 {
-                    sb.Append("=");
+                    if (pair.Key.Length > 1)
+                        sb.Append("=");
+                    else
+                        sb.Append(' ');
+
                     sb.Append(pair.Value);
                 }
             }
 
             return sb.ToString();
         }
-		
-		/// <summary>
-		/// Gets or sets a value indicating whether this instance is active.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is active; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsActive
-		{
-			get;
-			set;
-		}
-		
-		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="ProtexCore.ProtexTask"/> is finished.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if finished; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsFinished
-		{
-			get;
-			set;
-		}
-	}
-	
-	public class OrganizeSourceTask : ProtexTask
-	{
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is active.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is active; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsActive
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="ProtexCore.ProtexTask"/> is finished.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if finished; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsFinished
+        {
+            get;
+            set;
+        }
+    }
+
+    public class OrganizeSourceTask : ProtexTask
+    {
         protected string initialSourcePath;
         protected string newSourceFileName;
 
@@ -144,9 +156,9 @@ namespace ProtexCore
             this.scriptOptions = scriptParams;
             this.initialSourcePath = pathToSource;
             this.newSourceFileName = newSourceFileName;
-        }        
+        }
 
-        public override RunnerCommandResult Perform(IRunner runner)
+        internal override RunnerCommandResult Perform(IRunner runner)
         {
             RunnerCommandResult copyResult = runner.CopySource(this.initialSourcePath, this.newSourceFileName);
 
@@ -156,15 +168,14 @@ namespace ProtexCore
             // if copy is ok, that try to run
             // organizer script wherever it is
 
-            string pathToSource = runner.GetConfigOption(RemoteOption.TmpFolder) + this.newSourceFileName;
-            RunnerCommandResult organizerResult = 
+            RunnerCommandResult organizerResult =
                 runner.OrganizeSource(
-                    pathToSource,
+                    this.newSourceFileName,
                     this.DictionaryToParams());
 
             return organizerResult;
         }
-	}
+    }
 
     public enum SourceLanguage { CSharp, C, Cpp, Java, Pascal, Ruby, Python, Perl, PHP, Lisp }
 
@@ -199,7 +210,7 @@ namespace ProtexCore
         protected string pathToSource;
 
         public CompileSourceTask(SourceLanguage sourceLanguage,
-                                 string sourcePath, 
+                                 string sourcePath,
                                  Dictionary<string, string> scriptParams)
         {
             this.language = sourceLanguage;
@@ -208,10 +219,10 @@ namespace ProtexCore
         }
 
 
-        public override RunnerCommandResult Perform(IRunner runner)
+        internal override RunnerCommandResult Perform(IRunner runner)
         {
             RunnerCommandResult result = runner.CompileSource(
-                this.pathToSource, 
+                this.pathToSource,
                 this.language,
                 this.DictionaryToParams());
 
@@ -225,21 +236,24 @@ namespace ProtexCore
         protected SourceLanguage language;
         protected string pathToInput;
 
-        public RunTask(string solutionPath, 
+        public RunTask(string solutionPath,
                        SourceLanguage sourceLanguage,
-                       string inputPath)
+                       string inputPath,
+                       Dictionary<string, string> scriptParams)
         {
             this.pathToSolution = solutionPath;
             this.language = sourceLanguage;
             this.pathToInput = inputPath;
+            this.scriptOptions = scriptParams;
         }
 
-        public override RunnerCommandResult Perform(IRunner runner)
+        internal override RunnerCommandResult Perform(IRunner runner)
         {
             RunnerCommandResult result = runner.Run(
                 this.pathToSolution,
                 this.language,
-                this.pathToInput);
+                this.pathToInput,
+                this.DictionaryToParams());
 
             return result;
         }
@@ -254,7 +268,7 @@ namespace ProtexCore
             this.solutionFolderPath = solutionFolder;
         }
 
-        public override RunnerCommandResult Perform(IRunner runner)
+        internal override RunnerCommandResult Perform(IRunner runner)
         {
             RunnerCommandResult result = runner.CleanUp(this.solutionFolderPath);
             return result;

@@ -6,22 +6,27 @@ namespace ProtexCore
 {
     public enum RunSecurity { Usual, Secured }
 
-    internal class RunnerCommandResult
+    public class RunnerCommandResult
     {
         /// <summary>
         /// Used to return 0 if command is ok, and
         /// non-zero result if some error happened
         /// </summary>
         public int ReturnState { get; set; }
-        
+
         /// <summary>
         /// Stdout of command
         /// </summary>
         public string Output { get; set; }
     }
 
-	internal interface IRunner
-	{
+    /// <summary>
+    /// Interface for running tasks on server
+    /// All methods contain crucial required script parameters as own parameters
+    /// (all other required parameters should be stored in scriptParams variable)
+    /// </summary>
+    internal interface IRunner
+    {
         /// <summary>
         /// Copies local source to tmp/ sources folder
         /// </summary>
@@ -35,10 +40,9 @@ namespace ProtexCore
         /// moves source from temporary folder
         /// to needed solution folder
         /// </summary>
-        /// <param name="pathToSource"></param>
-        /// <param name="scriptParams"></param>
+        /// <param name="sourceName">Name of source file</param>
         /// <returns></returns>
-        RunnerCommandResult OrganizeSource(string pathToSource, string scriptParams);
+        RunnerCommandResult OrganizeSource(string sourceName, string scriptParams);
 
         /// <summary>
         /// Compiles specified source file with tool for specified language
@@ -57,7 +61,7 @@ namespace ProtexCore
         /// <param name="language">Language of runned solution</param>
         /// <param name="pathToInput">Path to file with input</param>
         /// <returns></returns>
-        RunnerCommandResult Run(string pathToSolution, SourceLanguage language, string pathToInput);
+        RunnerCommandResult Run(string pathToSolution, SourceLanguage language, string pathToInput, string scriptParams);
 
         /// <summary>
         /// Removes solution folder and source files
@@ -71,34 +75,26 @@ namespace ProtexCore
         /// </summary>
         /// <returns></returns>
         RunnerCommandResult Stop(int PID);
+    }
 
-        /// <summary>
-        /// Gets a specified option from configuration file
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        string GetConfigOption<T>(T option);
-	}
-	
-	internal class RemoteRunner : IRunner
-	{
+    internal class RemoteRunner : IRunner
+    {
         RemoteConfig innerConfig;
 
-		public RemoteRunner ()
-			:base()
-		{
-		}
-
-        public RemoteRunner(RemoteRunner copy)
-            :this(copy.innerConfig)
+        public RemoteRunner()
+            : base()
         {
         }
-		
-		public RemoteRunner (RemoteConfig config)
-		{
+
+        public RemoteRunner(RemoteRunner copy)
+            : this(copy.innerConfig)
+        {
+        }
+
+        public RemoteRunner(RemoteConfig config)
+        {
             innerConfig = config;
-		}
+        }
 
         /// <summary>
         /// Creates a specified ssh object and 
@@ -108,7 +104,7 @@ namespace ProtexCore
         /// <returns></returns>
         protected T CreateSshObject<T>() where T : SshBase
         {
-            T connection = 
+            T connection =
                 (T)Activator.CreateInstance(typeof(T),
                                             this.innerConfig[RemoteOption.SSH_HostAddress],
                                             this.innerConfig[RemoteOption.SSH_UserName]);
@@ -124,7 +120,7 @@ namespace ProtexCore
             }
             else
                 connection.Password = this.innerConfig[RemoteOption.SSH_Password];
-            
+
             return connection;
         }
 
@@ -207,10 +203,10 @@ namespace ProtexCore
         /// moves source from temporary folder
         /// to needed solution folder
         /// </summary>
-        /// <param name="pathToSource"></param>
-        /// <param name="scriptParams"></param>
+        /// <param name="sourceName">Name of source file</param>
+        /// <param name="folderName">Name of temporary subfolderfolder in solutions/ folder in which it'll be saved</param>
         /// <returns></returns>
-        public RunnerCommandResult OrganizeSource(string pathToSource, string scriptParams)
+        public RunnerCommandResult OrganizeSource(string sourceName, string scriptParams)
         {
             SshExec exec = this.CreateSshObject<SshExec>();
 
@@ -220,10 +216,14 @@ namespace ProtexCore
 
                 string exeName = this.innerConfig[RemoteOption.UserScriptsFolder] +
                                  this.innerConfig[RemoteOption.OrganizerScript];
+
+                string sourcePath = this.innerConfig[RemoteOption.TmpFolder] +
+                                    sourceName;
+
                 string command = string.Format(
                     "{0} --source={1} {2}",
-                    exeName, 
-                    pathToSource, 
+                    exeName,
+                    sourcePath,
                     scriptParams);
 
                 string stdout = string.Empty;
@@ -265,7 +265,7 @@ namespace ProtexCore
                                  this.innerConfig[RemoteOption.CompilerScript];
                 string command = string.Format(
                     "{0} --solution={1} --lang={2} {3}",
-                    exeName, 
+                    exeName,
                     RunnerHelper.Language[lang],
                     scriptParams);
 
@@ -294,10 +294,11 @@ namespace ProtexCore
         /// </summary>
         /// <param name="pathToSolution">Path to user solution 
         /// relatively to solutions/ folder</param>
-        /// <param name="language">Language of runned solution</param>
+        /// <param name="lang">Language of runned solution</param>
         /// <param name="pathToInput">Path to file with input</param>
+        /// <param name="scriptParams">Additional parameters</param>
         /// <returns></returns>
-        public RunnerCommandResult Run(string pathToSolution, SourceLanguage lang, string pathToInput)
+        public RunnerCommandResult Run(string pathToSolution, SourceLanguage lang, string pathToInput, string scriptParams)
         {
             SshExec exec = this.CreateSshObject<SshExec>();
 
@@ -307,14 +308,15 @@ namespace ProtexCore
 
                 string exeName = this.innerConfig[RemoteOption.UserScriptsFolder] +
                                  this.innerConfig[RemoteOption.RunnerScript];
-                
+
                 // TODO move this strings to config file
                 string command = string.Format(
-                    "{0} --solution={1} --lang={2} --input={3}",
+                    "{0} --solution={1} --lang={2} --input={3} {4}",
                     exeName,
                     pathToSolution,
                     RunnerHelper.Language[lang],
-                    pathToInput);
+                    pathToInput,
+                    scriptParams);
 
                 string stdout = string.Empty;
                 string stderr = string.Empty;
@@ -394,25 +396,55 @@ namespace ProtexCore
             return this.innerConfig[option];
         }
     }
-	
-	internal class LocalRunner : IRunner
-	{
+
+    internal class LocalRunner : IRunner
+    {
         LocalConfig innerConfig;
 
-		public LocalRunner()
-			:base()
-		{
-		}
+        public LocalRunner()
+            : base()
+        {
+        }
 
         public LocalRunner(LocalRunner copy)
             : this(copy.innerConfig)
         {
         }
-		
-		public LocalRunner (LocalConfig config)
-		{
+
+        public LocalRunner(LocalConfig config)
+        {
             this.innerConfig = config;
-		}
-	}
+        }
+
+        public RunnerCommandResult CopySource(string initialPathSource, string newSourceFileName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RunnerCommandResult OrganizeSource(string sourceName, string scriptParams)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RunnerCommandResult CompileSource(string pathToSource, SourceLanguage language, string scriptParams)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RunnerCommandResult Run(string pathToSolution, SourceLanguage language, string pathToInput, string scriptParams)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RunnerCommandResult CleanUp(string solutionFolder)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RunnerCommandResult Stop(int PID)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 
