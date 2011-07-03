@@ -19,7 +19,7 @@ E_NO_SOLUTION=2
 E_UNKNOWN_LANGUAGE=3
 
 # parse input data using GNU getopt library
-options=$(getopt -o hs:l: --longoptions solution:,lang:,help -- "$@")
+options=$(getopt -o hs:l:o --longoptions solution:,lang:,help,optimizations -- "$@")
 
 while true ; do
     case "$1" in
