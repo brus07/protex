@@ -8,8 +8,8 @@ function print_help()
 Usage `basename $0`:
 
  -h | --help           prints this help and exits
- -s | --solution       filename of user sources in tmp/ folder
- -l | --lang           name of folder in solutions/ directory
+ -s | --solution       path to user solution
+ -l | --lang           string value which means solution programming language
  -o | --optimizations  custom optimizations for compiler
 EOF
 }
@@ -31,19 +31,26 @@ while true ; do
     esac
 done
 
+# if solution doesn't exist - exit with error
 if [ ! -e $solution ]
     echo "Specified solution does not exist!" > &2
     exit $E_NO_SOLUTION;
 fi
 
 compile_string=""
+directory=`dirname $solution`
+
+# extract just filename without extension
 program_name=`basename $solution`
+program_name=${program_name%.*}
+program_path="$directory/$program_name"
+
 optimizations=${optimizations-""}
 
 case $lang in
-    "c")compile_string="gcc -o $program_name $optimizations $solution";;
-    "cpp")compile_string="g++ -o $program_name $optimizations $solution";;
-    "pas")compile_string="fpc -o$program_name $optimizations $solution";;
+    "c")compile_string="gcc -o $program_path $optimizations $solution";;
+    "cpp")compile_string="g++ -o $program_path $optimizations $solution";;
+    "pas")compile_string="fpc -o$program_path $optimizations $solution";;
     "java");;
     "ruby");;
     "py");;
