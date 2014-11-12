@@ -1,28 +1,29 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using ProtexCore.Config;
+using ProtexCore.Runner;
+using ProtexCore.Tasks;
 
 namespace ProtexCore
 {
     internal delegate RunnerCommandResult TaskPerformDelegate(IRunner runner);
-    public enum ManagerResult { Pending, CapacityLimit, Fail, Queued }
 
     public sealed class TaskManager
     {
         private IRunner runner;
         private Dictionary<ProtexTask, TaskPerformDelegate> pendingTasks;
-        private const int MAX_TASKS = 3;
+        private const int MaxTasks = 3;
 
         public TaskManager(RemoteConfig remoteConfig)
         {
-            this.runner = new RemoteRunner(remoteConfig);
-            this.pendingTasks = new Dictionary<ProtexTask, TaskPerformDelegate>();
+            runner = new RemoteRunner(remoteConfig);
+            pendingTasks = new Dictionary<ProtexTask, TaskPerformDelegate>();
         }
 
         public TaskManager(LocalConfig localConfig)
         {
-            this.runner = new LocalRunner(localConfig);
-            this.pendingTasks = new Dictionary<ProtexTask, TaskPerformDelegate>();
+            runner = new LocalRunner(localConfig);
+            pendingTasks = new Dictionary<ProtexTask, TaskPerformDelegate>();
         }
 
         /// <summary>
@@ -36,12 +37,12 @@ namespace ProtexCore
             // if AddTask will be called 
             // from different threads, than
             // elementary object is task list
-            lock (this.pendingTasks)
+            lock (pendingTasks)
             {
-                if (this.pendingTasks.Count >= MAX_TASKS)
+                if (pendingTasks.Count >= MaxTasks)
                     return ManagerResult.CapacityLimit;
 
-                if (this.pendingTasks.ContainsKey(task))
+                if (pendingTasks.ContainsKey(task))
                     return ManagerResult.Pending;
 
                 TaskPerformDelegate performDelegate = new TaskPerformDelegate(task.Perform);
@@ -50,7 +51,7 @@ namespace ProtexCore
 
                 // if queue capacity is ok
                 // than add new task
-                this.pendingTasks.Add(task, performDelegate);
+                pendingTasks.Add(task, performDelegate);
 
                 // create instance of RemoteRunner/LocalRunner
                 // depending on TaskManager inner Runner
@@ -58,7 +59,7 @@ namespace ProtexCore
                 // more flexible - runner can be passed to 
                 // parameter of AddTask() method)
                 performDelegate.BeginInvoke(
-                    (IRunner)Activator.CreateInstance(this.runner.GetType(), this.runner),
+                    (IRunner) Activator.CreateInstance(runner.GetType(), runner),
                     // use closure to get task reference
                     delegate(IAsyncResult result)
                     {
@@ -72,10 +73,10 @@ namespace ProtexCore
 
                         RunnerCommandResult commandResult = taskPerformDelegate.EndInvoke(result);
 
-                        lock (this.pendingTasks)
+                        lock (pendingTasks)
                         {
                             // remove task from dictionary
-                            this.pendingTasks.Remove(task);
+                            pendingTasks.Remove(task);
                             task.OnTaskCompleted(commandResult);
                         }
                     },
@@ -91,4 +92,3 @@ namespace ProtexCore
         }
     }
 }
-
