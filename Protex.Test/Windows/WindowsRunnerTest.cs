@@ -15,7 +15,7 @@ namespace Protex.Test.Windows
         {
             IRunner runner = WindowsCreator.CreateRunner();
             IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
-            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\EmptyExecutable\EmptyExecutable.exe";
+            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\EmptyExecutable.exe";
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
         }
