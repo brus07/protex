@@ -27,22 +27,31 @@ namespace Protex.Windows
             {
                 Process process = Process.Start(startInfo);
                 process.StandardInput.WriteLine(runnerStartInfo.InputString);
-                DateTime startTime = DateTime.Now;
                 int maximumUserTime = runnerStartInfo.WorkingTimeLimit * UserWorkingTimeKoef;
                 while(process.HasExited == false)
                 {
-                    result.WorkingTime = (int)((DateTime.Now - startTime).TotalMilliseconds);
+                    double realWorkingTime = (DateTime.Now - process.StartTime).TotalMilliseconds;
                     result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, process.PeakVirtualMemorySize64);
-                    if (result.WorkingTime > maximumUserTime)
+                    if (realWorkingTime > maximumUserTime)
                     {
+                        result.WorkingTime = (int)(realWorkingTime);
                         result.WorkingTime = maximumUserTime;
+                        process.Kill();
+                    }
+                    if (process.TotalProcessorTime.TotalMilliseconds > runnerStartInfo.WorkingTimeLimit)
+                    {
+                        result.WorkingTime = (int)(process.TotalProcessorTime.TotalMilliseconds);
                         process.Kill();
                     }
                     Thread.Sleep(50);
                 }
-                //process.WaitForExit(5000);
+
                 result.ExitCode = process.ExitCode;
-                result.OutputString = process.StandardOutput.ReadToEnd();
+                if (result.ExitCode != -1)
+                {
+                    result.OutputString = process.StandardOutput.ReadToEnd();
+                    result.WorkingTime = (int)(process.TotalProcessorTime.TotalMilliseconds);
+                }
                 process.Dispose();
             }
             catch
