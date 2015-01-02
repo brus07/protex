@@ -17,7 +17,7 @@ namespace Protex
         /// <summary>
         /// Maximum used memory in bytes.
         /// </summary>
-        int PeakMemoryUsed { get; set; }
+        long PeakMemoryUsed { get; set; }
         string OutputFile { get; set; }
         string ErrorOutputFile { get; set; }
     }

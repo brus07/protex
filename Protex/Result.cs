@@ -11,7 +11,7 @@ namespace Protex
 
         public int WorkingTime { get; set; }
 
-        public int PeakMemoryUsed { get; set; }
+        public long PeakMemoryUsed { get; set; }
 
         public string OutputFile { get; set; }
 
