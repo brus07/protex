@@ -20,6 +20,7 @@ namespace Protex.Windows
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardInput = true;
+            startInfo.RedirectStandardError = true;
 
             IResult result = new Result();
 
@@ -50,6 +51,7 @@ namespace Protex.Windows
                 if (result.ExitCode != -1)
                 {
                     result.OutputString = process.StandardOutput.ReadToEnd();
+                    result.ErrorOutputString = process.StandardError.ReadToEnd();
                     result.WorkingTime = (int)(process.TotalProcessorTime.TotalMilliseconds);
                 }
                 process.Dispose();

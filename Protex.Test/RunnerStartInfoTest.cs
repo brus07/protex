@@ -12,7 +12,7 @@ namespace Protex.Test
     {
         const string Arguments = "arguments x x";
         const string ExecutableFile = "but.exe";
-        const string InputFile = "input.txt";
+        const string InputString = "input text";
         const int MemoryLimit = 1024 * 1024 * 16; //16mb
         const int WorkingTimeLimit = 5 * 1000; //5secs
 
@@ -24,8 +24,8 @@ namespace Protex.Test
             Assert.AreEqual(ExecutableFile, startInfo.ExecutableFile);
             startInfo.Arguments = Arguments;
             Assert.AreEqual(Arguments, startInfo.Arguments);
-            startInfo.InputFile = InputFile;
-            Assert.AreEqual(InputFile, startInfo.InputFile);
+            startInfo.InputString = InputString;
+            Assert.AreEqual(InputString, startInfo.InputString);
             startInfo.MemoryLimit = MemoryLimit;
             Assert.AreEqual(MemoryLimit, startInfo.MemoryLimit);
             startInfo.WorkingTimeLimit = WorkingTimeLimit;
@@ -49,11 +49,11 @@ namespace Protex.Test
         }
 
         [Test]
-        public void TestInputFileField()
+        public void TestInputStringField()
         {
             IRunnerStartInfo startInfo = CreateStartInfo();
-            startInfo.InputFile = InputFile;
-            Assert.AreEqual(InputFile, startInfo.InputFile);
+            startInfo.InputString = InputString;
+            Assert.AreEqual(InputString, startInfo.InputString);
         }
 
         [Test]

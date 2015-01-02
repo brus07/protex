@@ -19,10 +19,8 @@ namespace Protex
         /// </summary>
         long PeakMemoryUsed { get; set; }
 
-        string OutputFile { get; set; }
-
         string OutputString { get; set; }
 
-        string ErrorOutputFile { get; set; }
+        string ErrorOutputString { get; set; }
     }
 }
