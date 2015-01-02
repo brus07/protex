@@ -15,6 +15,13 @@ namespace Protex
 
         public string OutputFile { get; set; }
 
+        public string OutputString { get; set; }
+
         public string ErrorOutputFile { get; set; }
+
+        public Result()
+        {
+            ExitCode = -1;
+        }
     }
 }

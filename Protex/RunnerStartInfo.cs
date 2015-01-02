@@ -13,6 +13,8 @@ namespace Protex
 
         public string InputFile { get; set; }
 
+        public string InputString { get; set; }
+
         public int WorkingTimeLimit { get; set; }
 
         public int MemoryLimit { get; set; }

@@ -19,12 +19,14 @@ namespace Protex.Windows
             startInfo.FileName = runnerStartInfo.ExecutableFile;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardInput = true;
 
             IResult result = new Result();
 
             try
             {
                 Process process = Process.Start(startInfo);
+                process.StandardInput.WriteLine(runnerStartInfo.InputString);
                 DateTime startTime = DateTime.Now;
                 int maximumUserTime = runnerStartInfo.WorkingTimeLimit * UserWorkingTimeKoef;
                 while(process.HasExited == false)
@@ -40,7 +42,7 @@ namespace Protex.Windows
                 }
                 //process.WaitForExit(5000);
                 result.ExitCode = process.ExitCode;
-                process.StandardOutput.ReadToEnd();
+                result.OutputString = process.StandardOutput.ReadToEnd();
                 process.Dispose();
             }
             catch
@@ -48,7 +50,7 @@ namespace Protex.Windows
                 throw;
             }
 
-            return new Result();
+            return result;
         }
     }
 }

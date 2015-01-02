@@ -10,6 +10,7 @@ namespace Protex
         string ExecutableFile { get; set; }
         string Arguments { get; set; }
         string InputFile { get; set; }
+        string InputString { get; set; }
 
         /// <summary>
         /// Limits of working time in milliseconds.
