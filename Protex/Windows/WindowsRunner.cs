@@ -17,6 +17,7 @@ namespace Protex.Windows
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
             startInfo.FileName = runnerStartInfo.ExecutableFile;
+            startInfo.Arguments = runnerStartInfo.Arguments;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardInput = true;
