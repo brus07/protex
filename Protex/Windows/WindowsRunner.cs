@@ -32,20 +32,28 @@ namespace Protex.Windows
                 int maximumUserTime = runnerStartInfo.WorkingTimeLimit * UserWorkingTimeKoef;
                 while(process.HasExited == false)
                 {
-                    double realWorkingTime = (DateTime.Now - process.StartTime).TotalMilliseconds;
-                    result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, process.PeakVirtualMemorySize64);
-                    if (realWorkingTime > maximumUserTime)
+                    try
                     {
-                        result.WorkingTime = (int)(realWorkingTime);
-                        result.WorkingTime = maximumUserTime;
-                        process.Kill();
+                        double realWorkingTime = (DateTime.Now - process.StartTime).TotalMilliseconds;
+                        result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, process.PeakVirtualMemorySize64 / (1024 * 1024));
+                        if (realWorkingTime > maximumUserTime)
+                        {
+                            result.WorkingTime = (int)(realWorkingTime);
+                            result.WorkingTime = maximumUserTime;
+                            process.Kill();
+                        }
+                        if (process.TotalProcessorTime.TotalMilliseconds > runnerStartInfo.WorkingTimeLimit)
+                        {
+                            result.WorkingTime = (int)(process.TotalProcessorTime.TotalMilliseconds);
+                            process.Kill();
+                        }
+                        Thread.Sleep(50);
                     }
-                    if (process.TotalProcessorTime.TotalMilliseconds > runnerStartInfo.WorkingTimeLimit)
+                    catch(InvalidOperationException ex)
                     {
-                        result.WorkingTime = (int)(process.TotalProcessorTime.TotalMilliseconds);
-                        process.Kill();
+                        result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, 1);
+                        result.WorkingTime = Math.Max(result.WorkingTime, 15);
                     }
-                    Thread.Sleep(50);
                 }
 
                 result.ExitCode = process.ExitCode;
@@ -54,6 +62,7 @@ namespace Protex.Windows
                     result.OutputString = process.StandardOutput.ReadToEnd();
                     result.ErrorOutputString = process.StandardError.ReadToEnd();
                     result.WorkingTime = (int)(process.TotalProcessorTime.TotalMilliseconds);
+                    result.WorkingTime = Math.Max(result.WorkingTime, 15);
                 }
                 process.Dispose();
             }

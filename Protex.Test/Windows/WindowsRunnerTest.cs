@@ -37,6 +37,23 @@ namespace Protex.Test.Windows
         }
 
         [Test]
+        public void TestHelloWorld()
+        {
+            const string expectedOutput = "Hello World!\r\n";
+
+            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\HelloWorld.exe";
+            Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
+
+            IRunner runner = WindowsCreator.CreateRunner();
+            IResult result = runner.Run(startInfo);
+
+            Assert.AreEqual(0, result.ExitCode);
+            Assert.Greater(startInfo.WorkingTimeLimit, result.WorkingTime);
+            Assert.AreEqual(expectedOutput, result.OutputString);
+        }
+
+        [Test]
         public void TestSimpleEcho()
         {
             const string input = "474";
@@ -53,6 +70,19 @@ namespace Protex.Test.Windows
             Assert.AreEqual(0, result.ExitCode);
             Assert.Greater(startInfo.WorkingTimeLimit, result.WorkingTime);
             Assert.AreEqual(expectedOutput, result.OutputString);
+        }
+
+        [Test]
+        public void TestReturnCode()
+        {
+            IRunner runner = WindowsCreator.CreateRunner();
+            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\Return47Error.exe";
+            Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
+            IResult result = runner.Run(startInfo);
+
+            Assert.Greater(startInfo.WorkingTimeLimit, result.WorkingTime);
+            Assert.AreEqual(47, result.ExitCode);
         }
     }
 }
