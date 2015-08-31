@@ -1,7 +1,9 @@
 ﻿using NUnit.Framework;
+using Protex.Test.Helpers;
 using Protex.Windows;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -11,11 +13,12 @@ namespace Protex.Test.Windows
     public class WindowsRunnerTest
     {
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("EmptyExecutableForTest")]
         public void TestEmptyExecutable()
         {
             IRunner runner = WindowsCreator.CreateRunner();
             IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
-            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\EmptyExecutable.exe";
+            startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "EmptyExecutable.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
 
@@ -24,11 +27,12 @@ namespace Protex.Test.Windows
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("InfiniteLoopTimeLimit")]
         public void TestTimeLimit()
         {
             IRunner runner = WindowsCreator.CreateRunner();
             IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
-            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\InfiniteLoopTimeLimit.exe";
+            startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "InfiniteLoopTimeLimit.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
 
@@ -37,12 +41,13 @@ namespace Protex.Test.Windows
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("HelloWorld")]
         public void TestHelloWorld()
         {
             const string expectedOutput = "Hello World!\r\n";
 
             IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
-            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\HelloWorld.exe";
+            startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "HelloWorld.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
 
             IRunner runner = WindowsCreator.CreateRunner();
@@ -54,13 +59,14 @@ namespace Protex.Test.Windows
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("SimpleEcho")]
         public void TestSimpleEcho()
         {
             const string input = "474";
             const string expectedOutput = "Output: " + input+"\r\n";
 
             IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
-            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\SimpleEcho.exe";
+            startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "SimpleEcho.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             startInfo.InputString = input;
 
@@ -73,11 +79,12 @@ namespace Protex.Test.Windows
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("Return47Error")]
         public void TestReturnCode()
         {
             IRunner runner = WindowsCreator.CreateRunner();
             IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
-            startInfo.ExecutableFile = @"..\..\..\TestData\ExecutableFiles\Return47Error.exe";
+            startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "Return47Error.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
 

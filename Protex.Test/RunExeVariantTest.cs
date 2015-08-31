@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Protex.Test.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,11 +27,12 @@ namespace Protex.Test
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("EmptyExecutable")]
         public void TestExeEmptyExecutable()
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            startInfo.Arguments = string.Format(" -e {0}", @"..\..\..\TestData\ExecutableFiles\EmptyExecutable.exe");
+            startInfo.Arguments = string.Format(" -e {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "EmptyExecutable.exe"));
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
@@ -47,11 +49,12 @@ namespace Protex.Test
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("InfiniteLoopTimeLimit")]
         public void TestExeInfiniteLoopTimeLimit()
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            startInfo.Arguments = string.Format(" -e {0}", @"..\..\..\TestData\ExecutableFiles\InfiniteLoopTimeLimit.exe");
+            startInfo.Arguments = string.Format(" -e {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "InfiniteLoopTimeLimit.exe"));
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
@@ -69,11 +72,12 @@ namespace Protex.Test
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("Return47Error")]
         public void TestExeReturnCode()
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            startInfo.Arguments = string.Format(" -e {0}", @"..\..\..\TestData\ExecutableFiles\Return47Error.exe");
+            startInfo.Arguments = string.Format(" -e {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "Return47Error.exe"));
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
@@ -89,13 +93,14 @@ namespace Protex.Test
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("HelloWorld")]
         public void TestExeOutputArgument()
         {
             const string expectedOutput = "Hello World!\r\n";
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            string exeFile = @"..\..\..\TestData\ExecutableFiles\HelloWorld.exe";
+            string exeFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath,  "HelloWorld.exe");
             string outputFile = "output.file";
             startInfo.Arguments = string.Format(" -e {0} -o {1}", exeFile, outputFile);
             startInfo.CreateNoWindow = true;
@@ -116,6 +121,7 @@ namespace Protex.Test
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("SimpleEcho")]
         public void TestExeInputAndOutputArguments()
         {
             const string input = "474";
@@ -123,7 +129,7 @@ namespace Protex.Test
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            string exeFile = @"..\..\..\TestData\ExecutableFiles\SimpleEcho.exe";
+            string exeFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "SimpleEcho.exe");
             string inputFile = "input.file";
             File.WriteAllText(inputFile, input);
             string outputFile = "output.file";
@@ -146,11 +152,12 @@ namespace Protex.Test
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("InfiniteLoopTimeLimit")]
         public void TestExeTimeLimitArgument()
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            startInfo.Arguments = string.Format("  -t 2000 -e {0}", @"..\..\..\TestData\ExecutableFiles\InfiniteLoopTimeLimit.exe");
+            startInfo.Arguments = string.Format("  -t 2000 -e {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "InfiniteLoopTimeLimit.exe"));
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
@@ -168,11 +175,12 @@ namespace Protex.Test
         }
 
         [Test]
+        [SimpleCsSourceFileCompilerAttribute("InfiniteLoopTimeLimit")]
         public void TestExeMemoryLimitArgument()
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            startInfo.Arguments = string.Format("  -m 100 -e {0}", @"..\..\..\TestData\ExecutableFiles\InfiniteLoopTimeLimit.exe");
+            startInfo.Arguments = string.Format("  -m 100 -e {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "InfiniteLoopTimeLimit.exe"));
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
