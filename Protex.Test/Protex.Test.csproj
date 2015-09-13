@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Configurator.cs" />
     <Compile Include="Helpers\ConstansContainer.cs" />
     <Compile Include="Helpers\SimpleCsSourceFileCompilerAttribute.cs" />
     <Compile Include="Helpers\SimpleCsSourceFileCompilerAttributeTest.cs" />
@@ -65,7 +66,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
