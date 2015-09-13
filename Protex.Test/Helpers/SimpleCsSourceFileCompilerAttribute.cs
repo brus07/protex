@@ -61,10 +61,11 @@ namespace Protex.Test.Helpers
 
         private void CompileFile(string baseFileName)
         {
-            string compilerPath = ConfigurationManager.AppSettings["CscCompilerPath"];
+            PrepareAppSettingForCurrentEnvironment();
+            string compiler = ConfigurationManager.AppSettings["Compiler"];
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.FileName = Path.Combine(compilerPath, "csc");
+            startInfo.FileName = compiler;
             startInfo.Arguments = string.Format(" /out:{0}{1}.exe {1}.cs", TemporaryExecutableFilesDirectory, baseFileName);
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
@@ -77,6 +78,15 @@ namespace Protex.Test.Helpers
             Assert.AreEqual(0, process.ExitCode);
 
             string outputString = process.StandardOutput.ReadToEnd();
+        }
+
+        private static void PrepareAppSettingForCurrentEnvironment()
+        {
+            ConfigurationManager.AppSettings["Compiler"] = ConfigurationManager.AppSettings["CscCompiler"];
+
+            //for Unix with Mono (mcs)
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+                ConfigurationManager.AppSettings["Compiler"] = ConfigurationManager.AppSettings["McsCompiler"];
         }
     }
 }
