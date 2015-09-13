@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace Protex.Test.Helpers
 {
@@ -40,6 +41,12 @@ namespace Protex.Test.Helpers
         {
             bool needCompile = false;
 
+            if (!Directory.Exists(Path.Combine(WorkingDirectory, TemporaryExecutableFilesDirectory)))
+            {
+                Directory.CreateDirectory(Path.Combine(WorkingDirectory, TemporaryExecutableFilesDirectory));
+                Thread.Sleep(50);
+            }
+
             string executableFile = Path.Combine(WorkingDirectory, TemporaryExecutableFilesDirectory, baseFileName + ".exe");
             string sourceFile = Path.Combine(WorkingDirectory, baseFileName + ".cs");
 
@@ -73,6 +80,8 @@ namespace Protex.Test.Helpers
             process.WaitForExit();
             Assert.IsTrue(process.HasExited);
             Assert.AreEqual(0, process.ExitCode);
+
+            Thread.Sleep(50);
 
             string outputString = process.StandardOutput.ReadToEnd();
         }
