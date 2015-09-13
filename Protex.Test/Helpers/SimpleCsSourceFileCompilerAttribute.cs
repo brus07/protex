@@ -82,11 +82,18 @@ namespace Protex.Test.Helpers
 
         private static void PrepareAppSettingForCurrentEnvironment()
         {
-            ConfigurationManager.AppSettings["Compiler"] = ConfigurationManager.AppSettings["CscCompiler"];
+            string currentCompiler = ConfigurationManager.AppSettings["CscCompiler"];
 
             //for Unix with Mono (mcs)
             if (Environment.OSVersion.Platform == PlatformID.Unix)
                 ConfigurationManager.AppSettings["Compiler"] = ConfigurationManager.AppSettings["McsCompiler"];
+
+            //update Compiler setting in config file
+            Configuration cfg = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            cfg.AppSettings.Settings.Remove("Compiler");
+            cfg.AppSettings.Settings.Add("Compiler", ConfigurationManager.AppSettings["CscCompiler"]);
+            cfg.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
         }
     }
 }
