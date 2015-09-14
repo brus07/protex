@@ -55,7 +55,7 @@ namespace Protex.Test.Windows
 
             Assert.AreEqual(0, result.ExitCode);
             Assert.Greater(startInfo.WorkingTimeLimit, result.WorkingTime);
-            Assert.AreEqual(expectedOutput, result.OutputString);
+            Assert.AreEqual(expectedOutput.TrimEnd(), result.OutputString.TrimEnd());
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace Protex.Test.Windows
 
             Assert.AreEqual(0, result.ExitCode);
             Assert.Greater(startInfo.WorkingTimeLimit, result.WorkingTime);
-            Assert.AreEqual(expectedOutput, result.OutputString);
+            Assert.AreEqual(expectedOutput.TrimEnd(), result.OutputString.TrimEnd());
         }
 
         [Test]

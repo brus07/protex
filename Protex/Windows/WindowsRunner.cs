@@ -49,7 +49,7 @@ namespace Protex.Windows
                         }
                         Thread.Sleep(50);
                     }
-                    catch(InvalidOperationException ex)
+                    catch(InvalidOperationException)
                     {
                         result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, 1);
                         result.WorkingTime = Math.Max(result.WorkingTime, 15);
