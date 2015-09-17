@@ -199,11 +199,16 @@ namespace Protex.Test
 
         private static int[] ParseExecuteResults(string output)
         {
-            string[] lines = output.Split();
+            List<string> stringes = new List<string>();
+            foreach (var item in output.Split())
+            {
+                if (!string.IsNullOrWhiteSpace(item))
+                    stringes.Add(item);
+            }
             List<int> result = new List<int>();
-            result.Add(int.Parse(lines[3])); //time
-            result.Add(int.Parse(lines[8])); //memory
-            result.Add(int.Parse(lines[12])); //exit code
+            result.Add(int.Parse(stringes[3])); //time
+            result.Add(int.Parse(stringes[7])); //memory
+            result.Add(int.Parse(stringes[10])); //exit code
             return result.ToArray();
         }
     }
