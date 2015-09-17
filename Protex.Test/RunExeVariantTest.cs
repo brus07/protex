@@ -117,7 +117,7 @@ namespace Protex.Test
             Assert.Less(resultValues[0], 1000);
             Assert.AreEqual(0, resultValues[2]);
 
-            Assert.AreEqual(expectedOutput, File.ReadAllText(outputFile));
+            Assert.AreEqual(expectedOutput.TrimEnd(), File.ReadAllText(outputFile).TrimEnd());
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace Protex.Test
             Assert.Less(resultValues[0], 1000);
             Assert.AreEqual(0, resultValues[2]);
 
-            Assert.AreEqual(expectedOutput, File.ReadAllText(outputFile));
+            Assert.AreEqual(expectedOutput.TrimEnd(), File.ReadAllText(outputFile).TrimEnd());
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace Protex.Test
             string outputString = process.StandardOutput.ReadToEnd();
             int[] resultValues = ParseExecuteResults(outputString);
             Assert.Greater(resultValues[0], 2000);
-            Assert.Less(resultValues[0], 2100);
+            Assert.Less(resultValues[0], 2300);
             Assert.AreEqual(-1, resultValues[2]);
         }
 
@@ -192,7 +192,7 @@ namespace Protex.Test
 
             string outputString = process.StandardOutput.ReadToEnd();
             int[] resultValues = ParseExecuteResults(outputString);
-            Assert.Less(resultValues[0], 1100);
+            Assert.Less(resultValues[0], 1300);
             Assert.LessOrEqual(resultValues[1], 100);
             Assert.AreEqual(-1, resultValues[2]);
         }

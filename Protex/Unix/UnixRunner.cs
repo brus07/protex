@@ -86,10 +86,13 @@ namespace Protex.Unix
                 case "FINISHED":
                     break;
                 case "TIMEOUT":
+                    result.ExitCode = -1;
                     break;
                 case "MEM":
+                    result.ExitCode = -1;
                     break;
                 case "HANGUP":
+                    result.ExitCode = -1;
                     break;
                 case "SIGNAL":
                     break;
