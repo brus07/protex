@@ -67,7 +67,7 @@ namespace Protex.Test
             string outputString = process.StandardOutput.ReadToEnd();
             int[] resultValues = ParseExecuteResults(outputString);
             Assert.Greater(resultValues[0], 1000);
-            Assert.Less(resultValues[0], 1100);
+            Assert.Less(resultValues[0], 1300);
             Assert.AreEqual(-1, resultValues[2]);
         }
 
