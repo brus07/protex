@@ -16,8 +16,8 @@ namespace Protex.Test.Windows
         [SimpleCsSourceFileCompilerAttribute("EmptyExecutableForTest")]
         public void TestEmptyExecutable()
         {
-            IRunner runner = WindowsCreator.CreateRunner();
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunner runner = Creator.CreateRunner();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "EmptyExecutable.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
@@ -30,8 +30,8 @@ namespace Protex.Test.Windows
         [SimpleCsSourceFileCompilerAttribute("InfiniteLoopTimeLimit")]
         public void TestTimeLimit()
         {
-            IRunner runner = WindowsCreator.CreateRunner();
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunner runner = Creator.CreateRunner();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "InfiniteLoopTimeLimit.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
@@ -46,11 +46,11 @@ namespace Protex.Test.Windows
         {
             const string expectedOutput = "Hello World!\r\n";
 
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "HelloWorld.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
 
-            IRunner runner = WindowsCreator.CreateRunner();
+            IRunner runner = Creator.CreateRunner();
             IResult result = runner.Run(startInfo);
 
             Assert.AreEqual(0, result.ExitCode);
@@ -65,12 +65,12 @@ namespace Protex.Test.Windows
             const string input = "474";
             const string expectedOutput = "Output: " + input+"\r\n";
 
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "SimpleEcho.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             startInfo.InputString = input;
 
-            IRunner runner = WindowsCreator.CreateRunner();
+            IRunner runner = Creator.CreateRunner();
             IResult result = runner.Run(startInfo);
 
             Assert.AreEqual(0, result.ExitCode);
@@ -82,8 +82,8 @@ namespace Protex.Test.Windows
         [SimpleCsSourceFileCompilerAttribute("Return47Error")]
         public void TestReturnCode()
         {
-            IRunner runner = WindowsCreator.CreateRunner();
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunner runner = Creator.CreateRunner();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "Return47Error.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);

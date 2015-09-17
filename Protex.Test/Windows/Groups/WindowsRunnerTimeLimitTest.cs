@@ -18,8 +18,8 @@ namespace Protex.Test.Windows.Groups
         [SimpleCsSourceFileCompilerAttribute("InfiniteLoopTimeLimit")]
         public void TestInfiniteLoop()
         {
-            IRunner runner = WindowsCreator.CreateRunner();
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunner runner = Creator.CreateRunner();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "InfiniteLoopTimeLimit.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
@@ -35,8 +35,8 @@ namespace Protex.Test.Windows.Groups
         [SimpleCsSourceFileCompilerAttribute("SimpleEcho")]
         public void TestWaitingInput()
         {
-            IRunner runner = WindowsCreator.CreateRunner();
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunner runner = Creator.CreateRunner();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "SimpleEcho.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
@@ -51,11 +51,11 @@ namespace Protex.Test.Windows.Groups
         [SimpleCsSourceFileCompilerAttribute("InfiniteLoopTimeLimit")]
         public void TestInfiniteLoopWait4seconds()
         {
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "InfiniteLoopTimeLimit.exe");
             startInfo.WorkingTimeLimit = 4000; //4 secs
 
-            IRunner runner = WindowsCreator.CreateRunner();
+            IRunner runner = Creator.CreateRunner();
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
 
@@ -70,11 +70,11 @@ namespace Protex.Test.Windows.Groups
         [SimpleCsSourceFileCompilerAttribute("SimpleEcho")]
         public void TestWaitingInputFor2seconds()
         {
-            IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "SimpleEcho.exe");
             startInfo.WorkingTimeLimit = 2000; //2 secs
 
-            IRunner runner = WindowsCreator.CreateRunner();
+            IRunner runner = Creator.CreateRunner();
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);
 

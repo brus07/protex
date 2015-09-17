@@ -15,8 +15,8 @@ namespace Protex
 
             if (arguments.Errors.Count() == 0)
             {
-                IRunner runner = WindowsCreator.CreateRunner();
-                IRunnerStartInfo startInfo = WindowsCreator.CreateRunnerStartInfo();
+                IRunner runner = Creator.CreateRunner();
+                IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
                 startInfo.ExecutableFile = arguments.Value.ExecuteCommand;
                 startInfo.MemoryLimit = arguments.Value.MemoryLimit;
                 startInfo.WorkingTimeLimit = arguments.Value.TimeLimit;

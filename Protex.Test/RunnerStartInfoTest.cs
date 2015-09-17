@@ -74,7 +74,7 @@ namespace Protex.Test
 
         private static IRunnerStartInfo CreateStartInfo()
         {
-            IRunnerStartInfo runnerStartInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunnerStartInfo runnerStartInfo = Creator.CreateRunnerStartInfo();
             Assert.NotNull(runnerStartInfo);
             return runnerStartInfo;
         }

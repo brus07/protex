@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineOptions.cs" />
+    <Compile Include="Configurator.cs" />
+    <Compile Include="Creator.cs" />
     <Compile Include="IResult.cs" />
     <Compile Include="IRunner.cs" />
     <Compile Include="IRunnerStartInfo.cs" />
@@ -55,7 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="RunnerStartInfo.cs" />
-    <Compile Include="Windows\WindowsCreator.cs" />
+    <Compile Include="Unix\UnixRunner.cs" />
     <Compile Include="Windows\WindowsRunner.cs" />
   </ItemGroup>
   <ItemGroup>

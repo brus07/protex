@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Protex.Unix;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Protex.Windows
 {
-    public static class WindowsCreator
+    public static class Creator
     {
         public static IRunnerStartInfo CreateRunnerStartInfo()
         {
@@ -17,6 +18,8 @@ namespace Protex.Windows
 
         public static IRunner CreateRunner()
         {
+            if (Configurator.IsUnix)
+                return new UnixRunner();
             return new WindowsRunner();
         }
     }

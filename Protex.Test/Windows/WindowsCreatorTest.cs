@@ -13,14 +13,14 @@ namespace Protex.Test.Windows
         [Test]
         public void CreateRunnerStartInfoTest()
         {
-            IRunnerStartInfo runnerStartInfo = WindowsCreator.CreateRunnerStartInfo();
+            IRunnerStartInfo runnerStartInfo = Creator.CreateRunnerStartInfo();
             Assert.NotNull(runnerStartInfo);
         }
 
         [Test]
         public void CreateRunnerTest()
         {
-            IRunner runner = WindowsCreator.CreateRunner();
+            IRunner runner = Creator.CreateRunner();
             Assert.NotNull(runner);
         }
     }
