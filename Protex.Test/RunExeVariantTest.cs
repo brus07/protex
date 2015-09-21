@@ -197,6 +197,29 @@ namespace Protex.Test
             Assert.AreEqual(-1, resultValues[2]);
         }
 
+        [Test]
+        [SimpleCsSourceFileCompilerAttribute("MemoryLimit")]
+        public void TestExeRealMemoryLimitArgument()
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.FileName = "protex.exe";
+            startInfo.Arguments = string.Format("  -m 74 -e {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "MemoryLimit.exe"));
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+
+            Process process = Process.Start(startInfo);
+            process.WaitForExit();
+            Assert.IsTrue(process.HasExited);
+            Assert.AreEqual(0, process.ExitCode);
+
+            string outputString = process.StandardOutput.ReadToEnd();
+            int[] resultValues = ParseExecuteResults(outputString);
+            Assert.Less(resultValues[0], 1300);
+            Assert.LessOrEqual(resultValues[1], 100);
+            Assert.AreEqual(-1, resultValues[2]);
+        }
+
         private static int[] ParseExecuteResults(string output)
         {
             List<string> stringes = new List<string>();

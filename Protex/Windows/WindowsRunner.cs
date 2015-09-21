@@ -38,11 +38,11 @@ namespace Protex.Windows
                         result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, process.PeakVirtualMemorySize64 / (1024 * 1024));
                         if (realWorkingTime > maximumUserTime)
                         {
-                            result.WorkingTime = (int)(realWorkingTime);
                             result.WorkingTime = maximumUserTime;
                             process.Kill();
                         }
-                        if (process.TotalProcessorTime.TotalMilliseconds > runnerStartInfo.WorkingTimeLimit)
+                        else if (process.TotalProcessorTime.TotalMilliseconds > runnerStartInfo.WorkingTimeLimit
+                            /*|| result.PeakMemoryUsed > runnerStartInfo.MemoryLimit*/)
                         {
                             result.WorkingTime = (int)(process.TotalProcessorTime.TotalMilliseconds);
                             process.Kill();
@@ -51,7 +51,7 @@ namespace Protex.Windows
                     }
                     catch(InvalidOperationException)
                     {
-                        result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, 1);
+                        //result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, 1);
                         result.WorkingTime = Math.Max(result.WorkingTime, 15);
                     }
                 }
