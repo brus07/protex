@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="Helpers\Configurator.cs" />
     <Compile Include="Helpers\ConstansContainer.cs" />
+    <Compile Include="Helpers\IgnoreOnWindowsAttribute.cs" />
+    <Compile Include="Helpers\IgnoreOnWindowsAttributeTest.cs" />
     <Compile Include="Helpers\SimpleCsSourceFileCompilerAttribute.cs" />
     <Compile Include="Helpers\SimpleCsSourceFileCompilerAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
