@@ -18,7 +18,7 @@ namespace Protex.Unix
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
             startInfo.FileName = Path.Combine("..", "..", "..", "Tools", "timeout", "timeout");
-            startInfo.Arguments = string.Format(" -t {0} -m {1} --detect-hangups ", runnerStartInfo.WorkingTimeLimit / 1000, runnerStartInfo.MemoryLimit * 1024) + "./" + runnerStartInfo.ExecutableFile + " " + runnerStartInfo.Arguments;
+            startInfo.Arguments = string.Format(" -t {0} -m {1} --detect-hangups ", runnerStartInfo.WorkingTimeLimit / 1000, runnerStartInfo.MemoryLimit * 1024) + " " + runnerStartInfo.ExecutableFile + " " + runnerStartInfo.Arguments;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardInput = true;
@@ -71,6 +71,7 @@ namespace Protex.Unix
 
         private IResult ParseOutputFromTimeout(string timeoutResult, IResult result)
         {
+            Console.WriteLine(timeoutResult);
             //FINISHED CPU 0.00 MEM 0 MAXMEM 3288 STALE 1
             //TIMEOUT CPU 5.21 MEM 26344 MAXMEM 26344 STALE 0
             //MEM CPU 0.15 MEM 26344 MAXMEM 26344 STALE 0

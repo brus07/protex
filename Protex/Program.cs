@@ -1,4 +1,5 @@
-﻿using Protex.Windows;
+﻿using CommandLine;
+using Protex.Windows;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,25 +12,36 @@ namespace Protex
     {
         static void Main(string[] args)
         {
-            var arguments = CommandLine.Parser.Default.ParseArguments<CommandLineOptions>(args);
+            CommandLineOptions commandLineOptions = null;
 
-            if (arguments.Errors.Count() == 0)
+            var arguments = Parser.Default.ParseArguments<CommandLineOptions>(args).WithParsed(options => commandLineOptions = options);
+
+            if (arguments is NotParsed<CommandLineOptions>)
+            {
+                return;
+            }
+
+            if (arguments is Parsed<CommandLineOptions>)
             {
                 IRunner runner = Creator.CreateRunner();
                 IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
-                startInfo.ExecutableFile = arguments.Value.ExecuteCommand;
-                startInfo.MemoryLimit = arguments.Value.MemoryLimit;
-                startInfo.WorkingTimeLimit = arguments.Value.TimeLimit;
-                if (!string.IsNullOrEmpty(arguments.Value.InputFile))
-                    startInfo.InputString = File.ReadAllText(arguments.Value.InputFile);
+                startInfo.ExecutableFile = "";
+                foreach (var item in commandLineOptions.ExecuteCommand)
+                {
+                    startInfo.ExecutableFile += " " + item;
+                }
+                startInfo.MemoryLimit = commandLineOptions.MemoryLimit;
+                startInfo.WorkingTimeLimit = commandLineOptions.TimeLimit;
+                if (!string.IsNullOrEmpty(commandLineOptions.InputFile))
+                    startInfo.InputString = File.ReadAllText(commandLineOptions.InputFile);
                 IResult result = runner.Run(startInfo);
 
                 Console.WriteLine("Working time : {0}", result.WorkingTime);
                 Console.WriteLine("Peak memory used: {0}", result.PeakMemoryUsed);
                 Console.WriteLine("Exit code: {0}", result.ExitCode);
 
-                if (!string.IsNullOrEmpty(arguments.Value.OutputFile))
-                    File.WriteAllText(arguments.Value.OutputFile, result.OutputString);
+                if (!string.IsNullOrEmpty(commandLineOptions.OutputFile))
+                    File.WriteAllText(commandLineOptions.OutputFile, result.OutputString);
             }
         }
     }
