@@ -71,7 +71,6 @@ namespace Protex.Unix
 
         private IResult ParseOutputFromTimeout(string timeoutResult, IResult result)
         {
-            Console.WriteLine(timeoutResult);
             //FINISHED CPU 0.00 MEM 0 MAXMEM 3288 STALE 1
             //TIMEOUT CPU 5.21 MEM 26344 MAXMEM 26344 STALE 0
             //MEM CPU 0.15 MEM 26344 MAXMEM 26344 STALE 0
