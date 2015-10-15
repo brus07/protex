@@ -22,7 +22,7 @@ namespace Protex.Test.Helpers
             }
         }
 
-        private static bool IsUnix
+        public static bool IsUnix
         {
             get
             {

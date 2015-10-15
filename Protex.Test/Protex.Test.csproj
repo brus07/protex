@@ -48,10 +48,13 @@
   <ItemGroup>
     <Compile Include="Helpers\Configurator.cs" />
     <Compile Include="Helpers\ConstansContainer.cs" />
+    <Compile Include="Helpers\IgnoreOnWindowsAttribute.cs" />
+    <Compile Include="Helpers\IgnoreOnWindowsAttributeTest.cs" />
     <Compile Include="Helpers\SimpleCsSourceFileCompilerAttribute.cs" />
     <Compile Include="Helpers\SimpleCsSourceFileCompilerAttributeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunExeVariantTest.cs" />
+    <Compile Include="Windows\Groups\WindowsRunnerMemoryLimitTest.cs" />
     <Compile Include="Windows\Groups\WindowsRunnerTimeLimitTest.cs" />
     <Compile Include="Windows\WindowsCreatorTest.cs" />
     <Compile Include="RunnerStartInfoTest.cs" />
