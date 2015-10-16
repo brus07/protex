@@ -170,7 +170,7 @@ namespace Protex.Test
             string outputString = process.StandardOutput.ReadToEnd();
             int[] resultValues = ParseExecuteResults(outputString);
             Assert.Greater(resultValues[0], 2000);
-            Assert.Less(resultValues[0], 2300);
+            Assert.Less(resultValues[0], 2500);
             Assert.AreEqual(-1, resultValues[2]);
         }
 
@@ -192,7 +192,7 @@ namespace Protex.Test
 
             string outputString = process.StandardOutput.ReadToEnd();
             int[] resultValues = ParseExecuteResults(outputString);
-            Assert.Less(resultValues[0], 1300);
+            Assert.Less(resultValues[0], 1500);
             Assert.LessOrEqual(resultValues[1], 100);
             Assert.AreEqual(-1, resultValues[2]);
         }
@@ -204,7 +204,7 @@ namespace Protex.Test
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = "protex.exe";
-            startInfo.Arguments = string.Format("  -m 74 -e {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "MemoryLimit.exe"));
+            startInfo.Arguments = string.Format("  -m 74 -e mono {0}", Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "MemoryLimit.exe"));
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
@@ -216,7 +216,7 @@ namespace Protex.Test
 
             string outputString = process.StandardOutput.ReadToEnd();
             int[] resultValues = ParseExecuteResults(outputString);
-            Assert.Less(resultValues[0], 1300);
+            Assert.Less(resultValues[0], 1500);
             Assert.LessOrEqual(resultValues[1], 100);
             Assert.AreEqual(-1, resultValues[2]);
         }
