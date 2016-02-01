@@ -55,9 +55,17 @@ namespace Protex.Unix
                 if (result.ExitCode != -1)
                 {
                     result.OutputString = process.StandardOutput.ReadToEnd();
-                    result.ErrorOutputString = process.StandardError.ReadToEnd();
 
-                    result = ParseOutputFromTimeout(result.ErrorOutputString, result);
+                    string[] errorOutputLines = process.StandardError.ReadToEnd().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+                    //need only first lines without last two lines
+                    result.ErrorOutputString = "";
+                    for (int i = 0; i < errorOutputLines.Length - 2; i++)
+                        result.ErrorOutputString = string.Concat(result.ErrorOutputString, errorOutputLines[i], Environment.NewLine);
+
+                    //only last two lines
+                    string timeoutOutputResults = string.Concat(errorOutputLines[errorOutputLines.Length - 2], Environment.NewLine, errorOutputLines[errorOutputLines.Length - 1]);
+                    result = ParseOutputFromTimeout(timeoutOutputResults, result);
                 }
                 process.Dispose();
             }
@@ -78,8 +86,6 @@ namespace Protex.Unix
             //SIGNAL CPU 0.01 MEM 2364 MAXMEM 2364 STALE 1
             string[] splits = timeoutResult.Split();
             string reason = splits[0];
-            int time = (int)(double.Parse(splits[2]) * 1000);
-            int maxmemory = int.Parse(splits[6]) / 1024;
 
             switch (splits[0])
             {
@@ -100,6 +106,9 @@ namespace Protex.Unix
                     throw new ApplicationException(string.Format("Unknown timeout message={0}", timeoutResult));
                     break;
             }
+
+            int time = (int)(double.Parse(splits[2]) * 1000);
+            int maxmemory = int.Parse(splits[6]) / 1024;
 
             result.WorkingTime = Math.Max(result.WorkingTime, time);
             result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, maxmemory);
