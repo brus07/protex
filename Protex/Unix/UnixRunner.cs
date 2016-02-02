@@ -56,15 +56,21 @@ namespace Protex.Unix
                 {
                     result.OutputString = process.StandardOutput.ReadToEnd();
 
-                    string[] errorOutputLines = process.StandardError.ReadToEnd().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    string standardErrorOutput = process.StandardError.ReadToEnd().TrimEnd();
+                    string[] errorOutputLines = standardErrorOutput.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
 
+                    int timeoutOutputLines = 2;
+                    if (!errorOutputLines[errorOutputLines.Length - 1].Contains("<time "))
+                        timeoutOutputLines = 1;
                     //need only first lines without last two lines
                     result.ErrorOutputString = "";
-                    for (int i = 0; i < errorOutputLines.Length - 2; i++)
+                    for (int i = 0; i < errorOutputLines.Length - timeoutOutputLines; i++)
                         result.ErrorOutputString = string.Concat(result.ErrorOutputString, errorOutputLines[i], Environment.NewLine);
 
                     //only last two lines
-                    string timeoutOutputResults = string.Concat(errorOutputLines[errorOutputLines.Length - 2], Environment.NewLine, errorOutputLines[errorOutputLines.Length - 1]);
+                    string timeoutOutputResults = errorOutputLines[errorOutputLines.Length - timeoutOutputLines];
+                    if (timeoutOutputLines > 1)
+                        timeoutOutputResults += string.Concat(Environment.NewLine, errorOutputLines[errorOutputLines.Length - 1]);
                     result = ParseOutputFromTimeout(timeoutOutputResults, result);
                 }
                 process.Dispose();
