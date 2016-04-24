@@ -15,7 +15,7 @@ namespace Protex
         int WorkingTime { get; set; }
 
         /// <summary>
-        /// Maximum used memory in MiB.
+        /// Maximum used memory in KiB.
         /// </summary>
         long PeakMemoryUsed { get; set; }
 

@@ -18,7 +18,7 @@ namespace Protex.Unix
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
             startInfo.FileName = Path.Combine("..", "..", "..", "Tools", "timeout", "timeout");
-            startInfo.Arguments = string.Format(" -t {0} -m {1} --detect-hangups ", runnerStartInfo.WorkingTimeLimit / 1000, runnerStartInfo.MemoryLimit * 1024) + " " + runnerStartInfo.ExecutableFile + " " + runnerStartInfo.Arguments;
+            startInfo.Arguments = string.Format(" -t {0} -m {1} --detect-hangups ", runnerStartInfo.WorkingTimeLimit / 1000, runnerStartInfo.MemoryLimit) + " " + runnerStartInfo.ExecutableFile + " " + runnerStartInfo.Arguments;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardInput = true;
@@ -117,7 +117,7 @@ namespace Protex.Unix
             }
 
             int time = (int)(double.Parse(splits[2]) * 1000);
-            int maxmemory = int.Parse(splits[6]) / 1024;
+            int maxmemory = int.Parse(splits[6]);
 
             result.WorkingTime = Math.Max(result.WorkingTime, time);
             result.PeakMemoryUsed = Math.Max(result.PeakMemoryUsed, maxmemory);
