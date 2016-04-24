@@ -11,8 +11,8 @@ namespace Protex.Windows
         public static IRunnerStartInfo CreateRunnerStartInfo()
         {
             IRunnerStartInfo runner = new RunnerStartInfo();
-            runner.WorkingTimeLimit = 1000; //1 sec
-            runner.MemoryLimit = 64; //64mb
+            runner.WorkingTimeLimit = 1000; //1 sec in milliseconds
+            runner.MemoryLimit = 64*1024; //64mb in kb
             return runner;
         }
 

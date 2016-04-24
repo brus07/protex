@@ -15,8 +15,14 @@ namespace Protex
 
         public string InputString { get; set; }
 
+        /// <summary>
+        /// Limits of working time in milliseconds.
+        /// </summary>
         public int WorkingTimeLimit { get; set; }
 
+        /// <summary>
+        /// Limits of memory in KiB.
+        /// </summary>
         public int MemoryLimit { get; set; }
     }
 }

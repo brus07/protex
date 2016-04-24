@@ -18,7 +18,7 @@ namespace Protex
         int WorkingTimeLimit { get; set; }
         
         /// <summary>
-        /// Limits of memory in MiB.
+        /// Limits of memory in KiB.
         /// </summary>
         int MemoryLimit { get; set; }
     }
