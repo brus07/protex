@@ -112,8 +112,7 @@ namespace Protex.Unix
                 case "SIGNAL":
                     break;
                 default:
-                    throw new ApplicationException(string.Format("Unknown timeout message={0}", timeoutResult));
-                    break;
+                    throw new InvalidOperationException(string.Format("Unknown timeout message={0}", timeoutResult));
             }
 
             int time = (int)(double.Parse(splits[2]) * 1000);
