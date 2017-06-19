@@ -13,7 +13,7 @@ namespace Protex.Test.Helpers
     {
         private static string BaseFileNameForTest = "EmptyExecutableForTest";
 
-        private static string WorkingDirectory = @"../../../TestData/ExecutableFiles/Project";
+        private static string WorkingDirectory = Path.Combine(ConstansContainer.ExecutableFilesPath, "Project");
         private static string TemporaryExecutableFilesDirectory = @"../TemporaryExecutableFiles/";
 
         [Test]

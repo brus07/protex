@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NUnit.Framework.Interfaces;
 
 namespace Protex.Test.Helpers
 {
@@ -15,7 +16,7 @@ namespace Protex.Test.Helpers
             IsUnix = Configurator.IsUnix;
         }
 
-        public void BeforeTest(TestDetails testDetails)
+        public void BeforeTest(ITest test)
         {
             if (!IsUnix)
             {
@@ -23,7 +24,9 @@ namespace Protex.Test.Helpers
             }
         }
 
-        public void AfterTest(TestDetails testDetails) { }
+        public void AfterTest(ITest test)
+        {
+        }
 
         public ActionTargets Targets { get; private set; }
     }

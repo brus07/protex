@@ -1,15 +1,15 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using NUnit.Framework.Interfaces;
 
 namespace Protex.Test.Helpers
 {
     class SimpleCsSourceFileCompilerAttribute : Attribute, ITestAction
     {
-        private static string WorkingDirectory = @"../../../TestData/ExecutableFiles/Project";
+        private static string WorkingDirectory = Path.Combine(ConstansContainer.ExecutableFilesPath, "Project");
         private static string TemporaryExecutableFilesDirectory = @"../TemporaryExecutableFiles/";
 
         private string baseFileName;
@@ -19,12 +19,11 @@ namespace Protex.Test.Helpers
             this.baseFileName = baseFileName;
         }
 
-        public void AfterTest(TestDetails testDetails)
+        public void AfterTest(ITest test)
         {
-            //throw new NotImplementedException();
         }
 
-        public void BeforeTest(TestDetails testDetails)
+        public void BeforeTest(ITest test)
         {
             PrepareExecutableFile();
         }
