@@ -40,7 +40,12 @@ namespace Protex
                 "-o | --ouputfile <file>",
                 "Path to input file (console input).",
                 CommandOptionType.SingleValue);
-
+/*
+            CommandOption verbosityOption = app.Option(
+                "-v | --verbose",
+                "Execute command.",
+                CommandOptionType.NoValue);
+*/
             app.HelpOption("-? | -h | --help");
 
             app.OnExecute(() =>

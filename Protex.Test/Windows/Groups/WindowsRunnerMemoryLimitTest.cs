@@ -57,7 +57,7 @@ namespace Protex.Test.Windows.Groups
         {
             IRunner runner = Creator.CreateRunner();
             IRunnerStartInfo startInfo = Creator.CreateRunnerStartInfo();
-            startInfo.MemoryLimit = 50;
+            startInfo.MemoryLimit = 60;
             startInfo.ExecutableFile = Path.Combine(ConstansContainer.TemporaryExecutableFilesPath, "EmptyExecutable.exe");
             Assert.IsTrue(System.IO.File.Exists(startInfo.ExecutableFile));
             IResult result = runner.Run(startInfo);

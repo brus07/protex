@@ -19,7 +19,7 @@ namespace Protex
 
         public Result()
         {
-            ExitCode = -1;
+            ExitCode = -100;
         }
     }
 }

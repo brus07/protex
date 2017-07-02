@@ -56,7 +56,7 @@ namespace Protex.Unix
                 result.ExitCode = process.ExitCode;
                 if (killed)
                     result.ExitCode = -1;
-                if (result.ExitCode != -1)
+                if (result.ExitCode >= 0)
                 {
                     result.OutputString = process.StandardOutput.ReadToEnd();
 
