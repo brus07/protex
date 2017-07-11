@@ -14,7 +14,7 @@ namespace Protex.Test.Windows.Groups
     {
         [Test]
         [SimpleCsSourceFileCompilerAttribute("MemoryLimit")]
-        [IgnoreOnWindows]
+        [Platform(Exclude = "Win")]
         public void TestMemoryLimit()
         {
             IRunner runner = Creator.CreateRunner();
@@ -70,7 +70,7 @@ namespace Protex.Test.Windows.Groups
 
         [Test]
         [SimpleCsSourceFileCompilerAttribute("EmptyExecutable")]
-        [IgnoreOnWindows]
+        [Platform(Exclude = "Win")]
         public void TestUpperMemoryLimitWithEmptyExecutable()
         {
             IRunner runner = Creator.CreateRunner();
@@ -105,7 +105,7 @@ namespace Protex.Test.Windows.Groups
 
         [Test]
         [SimpleCsSourceFileCompilerAttribute("HelloWorld")]
-        [IgnoreOnWindows]
+        [Platform(Exclude = "Win")]
         public void TestUpperMemoryLimitWithHelloWorld()
         {
             IRunner runner = Creator.CreateRunner();

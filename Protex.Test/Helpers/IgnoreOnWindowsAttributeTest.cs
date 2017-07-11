@@ -1,8 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Protex.Test.Helpers
 {
@@ -10,10 +6,24 @@ namespace Protex.Test.Helpers
     public class IgnoreOnWindowsAttributeTest
     {
         [Test]
-        [IgnoreOnWindows]
+        [Platform(Exclude = "Win")]
         public void TestIgnoreOnWindowsAttribute()
         {
             Assert.AreEqual(Configurator.IsUnix, true);
+        }
+
+        [Test]
+        [Platform("Linux")]
+        public void TestConfiguratorIsUnixOnLinux()
+        {
+            Assert.AreEqual(Configurator.IsUnix, true);
+        }
+
+        [Test]
+        [Platform("Win")]
+        public void TestConfiguratorIsUnixAnWindows()
+        {
+            Assert.AreEqual(Configurator.IsUnix, false);
         }
     }
 }

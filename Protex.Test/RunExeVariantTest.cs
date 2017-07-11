@@ -199,7 +199,7 @@ namespace Protex.Test
 
         [Test]
         [SimpleCsSourceFileCompilerAttribute("MemoryLimit")]
-        [IgnoreOnWindows]
+        [Platform(Exclude = "Win")]
         public void TestExeRealMemoryLimitArgument()
         {
             ProcessStartInfo startInfo = new ProcessStartInfo();
